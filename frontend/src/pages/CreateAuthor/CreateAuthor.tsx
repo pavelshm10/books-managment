@@ -45,7 +45,6 @@ export default function CreateAuthor() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     //to avoid clear form on submit then errors
-    console.log("ss");
     event.preventDefault();
     setFormSubmitted(true);
     formik.handleSubmit();
@@ -102,7 +101,7 @@ export default function CreateAuthor() {
           )}
         </div>
         <div>
-          <label htmlFor="imageUrl">Upload Picture</label>
+          <label htmlFor="pictureUrl">Upload Picture</label>
           <input
             id="pictureUrl"
             ref={fileInputRef}
