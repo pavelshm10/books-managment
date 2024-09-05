@@ -1,13 +1,50 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { addBook, Book } from "../../services/book.service";
-import { useFormik } from "formik";
-import { validationSchema } from "../../validation/book.schema";
-import { storage } from "../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { FormikProps, useFormik } from "formik";
+import { bookValidationSchema } from "../../validation/book.schema";
+import { useUploadImageFile } from "../../hooks/useUploadImageFile";
+import { Author } from "../../services/author.service";
 
 export default function CreateBook() {
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [imageFile, setImageFile] = useState<File>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const formik = useFormik<Book>({
+    initialValues: {
+      title: "",
+      price: 10,
+      description: "",
+      category: "",
+      imageUrl: "",
+      author: "",
+      active: true,
+    },
+    validationSchema: bookValidationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      if (Object.keys(formik.errors).length === 0) {
+        try {
+          if (!imageFile) return;
+          //upload image to firebase on submit
+          uploadImageToFirebase(
+            imageFile,
+            `images/books/${formik.values.title}_${formik.values.author}`
+          ).then((url) => {
+            addBook({ ...formik.values, imageUrl: url });
+          });
+          clearForm(resetForm);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    },
+  });
+
+  const {
+    handleFileInputChange,
+    uploadImageToFirebase,
+    clearForm,
+    setFormSubmitted,
+    imageFile,
+    formSubmitted,
+  } = useUploadImageFile(formik, fileInputRef);
 
   const authors = [
     { id: "1", name: "Author 1" },
@@ -15,48 +52,17 @@ export default function CreateBook() {
     { id: "3", name: "Author 3" },
   ];
 
-  const formik = useFormik<Book>({
-    initialValues: {
-      title: "",
-      price: 0,
-      description: "",
-      category: "",
-      imageUrl: "",
-      author: "",
-      active: true,
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      uploadFile();
-      if (Object.keys(formik.errors).length === 0) {
-        console.log("Form submitted:", values);
-        setFormSubmitted(false);
-        await addBook(values);
-        resetForm();
-      }
-    },
-  });
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    //to avoid clear form on submit then errors
     event.preventDefault();
     setFormSubmitted(true);
     formik.handleSubmit();
   };
 
-  const uploadFile = async () => {
-    try {
-      console.log("val 0",formik.values)
-
-      if (!imageFile) return;
-      const storageRef = ref(storage, `images/${imageFile.name}`);
-      await uploadBytes(storageRef, imageFile);
-      const downloadURL = await getDownloadURL(storageRef);
-      formik.setFieldValue("imageUrl", downloadURL);
-      console.log("val ",formik.values)
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      throw error;
-    }
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    //TODO:check if title not exits in other books of this author
+    formik.setFieldValue("title", value);
   };
 
   return (
@@ -69,7 +75,7 @@ export default function CreateBook() {
             id="title"
             name="title"
             type="text"
-            onChange={formik.handleChange}
+            onChange={handleTitleChange}
             value={formik.values.title}
           />
           {formSubmitted && formik.errors.title && (
@@ -84,6 +90,9 @@ export default function CreateBook() {
             type="number"
             onChange={formik.handleChange}
             value={formik.values.price}
+            onBlur={formik.handleBlur}
+            min="10"
+            max="100"
           />
           {formSubmitted && formik.errors.price && (
             <div>{formik.errors.price}</div>
@@ -119,13 +128,11 @@ export default function CreateBook() {
           <label htmlFor="imageUrl">Upload Image</label>
           <input
             id="imageUrl"
+            ref={fileInputRef}
             name="imageUrl"
             type="file"
             accept="image/*"
-            onChange={(event) => {
-              event.currentTarget.files &&
-                setImageFile(event.currentTarget.files[0]);
-            }}
+            onChange={(e)=>handleFileInputChange(e,'imageUrl')}
           />
           {formSubmitted && formik.errors.imageUrl && (
             <div>{formik.errors.imageUrl}</div>

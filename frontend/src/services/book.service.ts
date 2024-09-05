@@ -7,14 +7,13 @@ export interface Book {
   price: number;
   description: string;
   category: string;
-  imageUrl: '';
-  author: '';
+  imageUrl: string;
+  author: string;
   active?: boolean;
 }
 
 async function addBook(book: Book): Promise<void> {
   try {
-    console.log("in");
     const docRef = await addDoc(collection(firestore, "books"), book);
     console.log("Book written with ID:", docRef.id);
   } catch (e) {

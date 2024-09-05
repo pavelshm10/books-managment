@@ -1,9 +1,6 @@
 import React from "react";
 import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import Books from "./pages/BooksList/BooksList";
-import Authors from "./pages/AuthorsList/AuthorsList";
 import { Navbar } from "./components";
 import BooksList from "./pages/BooksList/BooksList";
 import AuthorsList from "./pages/AuthorsList/AuthorsList";

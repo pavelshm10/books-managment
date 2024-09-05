@@ -4,10 +4,10 @@ import { collection, addDoc } from "firebase/firestore";
 
 export interface Author {
   name: string;
-  age: number;
-  description: string;
-  state: string;
-  picture: string;
+  age: string;
+  country: string;
+  pictureUrl: string;
+  active?: boolean;
 }
 
 async function addAuthor(author: Author): Promise<void> {
