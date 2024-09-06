@@ -1,12 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { addBook, Book } from "../../services/book.service";
-import { FormikProps, useFormik } from "formik";
+import { useFormik } from "formik";
 import { bookValidationSchema } from "../../validation/book.schema";
 import { useUploadImageFile } from "../../hooks/useUploadImageFile";
-import { Author } from "../../services/author.service";
+import { Book } from "../../types/Book.type";
+import { useSelector } from "react-redux";
+import { booksSelectors } from "../../store/books/books.selector";
+import { useAppDispatch } from "../../store/store";
+import { addBook } from "../../store/books/books.thunk";
 
 export default function CreateBook() {
+  const books=useSelector(booksSelectors.books)
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
+
   const formik = useFormik<Book>({
     initialValues: {
       title: "",
@@ -27,7 +33,7 @@ export default function CreateBook() {
             imageFile,
             `images/books/${formik.values.title}_${formik.values.author}`
           ).then((url) => {
-            addBook({ ...formik.values, imageUrl: url });
+            dispatch(addBook({ ...formik.values, imageUrl: url }));
           });
           clearForm(resetForm);
         } catch (error) {
@@ -52,16 +58,36 @@ export default function CreateBook() {
     { id: "3", name: "Author 3" },
   ];
 
+  const checkDuplicateTitleForAuthor = (): boolean => {
+    const filteredBooks = books.filter(
+      (book) => book.author.toLowerCase() === formik.values.author.toLowerCase()
+    );
+    if (
+      filteredBooks.some(
+        (book) => book.title.toLowerCase() === formik.values.title.toLowerCase()
+      )
+    ) {
+      formik.setFieldError(
+        "title",
+        "A book with this title already exists for the specified author."
+      );
+      return true;
+    }
+    return false;
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     //to avoid clear form on submit then errors
     event.preventDefault();
     setFormSubmitted(true);
+    if (await checkDuplicateTitleForAuthor()) return;
     formik.handleSubmit();
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { value } = event.target;
-    //TODO:check if title not exits in other books of this author
     formik.setFieldValue("title", value);
   };
 
@@ -132,7 +158,7 @@ export default function CreateBook() {
             name="imageUrl"
             type="file"
             accept="image/*"
-            onChange={(e)=>handleFileInputChange(e,'imageUrl')}
+            onChange={(e) => handleFileInputChange(e, "imageUrl")}
           />
           {formSubmitted && formik.errors.imageUrl && (
             <div>{formik.errors.imageUrl}</div>

@@ -1,9 +1,10 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+// import { initializeApp, getApp, getApps } from 'firebase/app';
+// import { getFirestore } from 'firebase/firestore';
+// import { getStorage } from 'firebase/storage';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAU1knQZX3EjewfpAWctIg2pupNImuZqgc",
   authDomain: "books-managment-36c7e.firebaseapp.com",
@@ -14,10 +15,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+firebase.initializeApp(firebaseConfig);
 
-const firestore = getFirestore(app);
+export const firestore = firebase.firestore();
+export const storage = firebase.storage();
 
-const storage = getStorage(app);
+// Initialize Firebase
+// const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-export { firestore, storage };
+// const firestore = getFirestore(app);
+
+// const storage = getStorage(app);
+
+// export { firestore, storage };

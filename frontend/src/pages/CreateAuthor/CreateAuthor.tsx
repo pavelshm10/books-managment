@@ -1,10 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { addAuthor, Author } from "../../services/author.service";
 import { authorValidationSchema } from "../../validation/author.schema";
 import { useUploadImageFile } from "../../hooks/useUploadImageFile";
+import { Author } from "../../types/Author.type";
+import { addAuthor } from "../../store/author/author.thunk";
+import { authorsSelectors } from "../../store/author/author.selector";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
 
 export default function CreateAuthor() {
+  const authors=useSelector(authorsSelectors.authors);
+  const dispatch = useAppDispatch();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formik = useFormik<Author>({
     initialValues: {
@@ -24,7 +31,8 @@ export default function CreateAuthor() {
             imageFile,
             `images/authors/${formik.values.name}}`
           ).then((url) => {
-            addAuthor({ ...formik.values, pictureUrl: url });
+            dispatch(addAuthor({ ...formik.values, pictureUrl: url }));
+            // addDocument('authors',{ ...formik.values, pictureUrl: url });
           });
           clearForm(resetForm);
         } catch (error) {

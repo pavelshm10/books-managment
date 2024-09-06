@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FormikProps } from "formik";
 import { storage } from "../firebase";
-import { Book } from "../services/book.service";
-import { Author } from "../services/author.service";
 
 export const useUploadImageFile = <T extends object>(
   formik: FormikProps<T>,
