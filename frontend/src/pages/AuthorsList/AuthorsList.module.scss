@@ -1,9 +1,17 @@
-table{
-    width: 80%;
-    margin: auto;
+table {
+  width: 80%;
+  margin: auto;
 }
 
-td{
-    border: 2px solid #007bff;
-    text-align: center;
+td {
+  border: 2px solid #007bff;
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .table-responsive {
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
 }

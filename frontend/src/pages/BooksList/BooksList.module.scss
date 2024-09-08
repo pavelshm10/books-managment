@@ -1,10 +1,36 @@
-.book_list{
-    font-size: 1.2rem;
-    display: flex;
-    justify-content: center;
-    width: 70%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin: auto;
-    gap: 10px;
+.pagination_container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.book_list {
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 70%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: auto;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .book_list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .book_list {
+    grid-template-columns: 1fr; /* 1 card per row */
+  }
 }
