@@ -1,0 +1,10 @@
+.book_list{
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: auto;
+    gap: 10px;
+}

@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 import { Navbar } from "./components";
 import BooksList from "./pages/BooksList/BooksList";
 import AuthorsList from "./pages/AuthorsList/AuthorsList";
@@ -9,26 +14,33 @@ import CreateBook from "./pages/CreateBook/CreateBook";
 import { fetchBooks } from "./store/books/books.thunk";
 import { useAppDispatch } from "./store/store";
 import { fetchAuthors } from "./store/author/author.thunk";
+import { booksSelectors } from "./store/books/books.selector";
+import { useSelector } from "react-redux";
+import './styles/index';
+import Loader from "./components/Loader/Loader";
 
 function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch (fetchBooks());
-    dispatch (fetchAuthors());
+    dispatch(fetchBooks());
+    dispatch(fetchAuthors());
   }, [dispatch]);
 
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<BooksList />} />
-        <Route path="/books-list" element={<BooksList />} />
-        <Route path="/authors-list" element={<AuthorsList />} />
-        <Route path="/create-author" element={<CreateAuthor />} />
-        <Route path="/create-book" element={<CreateBook />} />
-      </Routes>
-    </Router>
+    <div className="">
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Navigate to="/books-list" />} />
+          <Route path="/books-list" element={<BooksList />} />
+          <Route path="/authors-list" element={<AuthorsList />} />
+          <Route path="/create-author" element={<CreateAuthor />} />
+          <Route path="/create-book" element={<CreateBook />} />
+        </Routes>
+      </Router>
+      <Loader/>
+    </div>
   );
 }
 

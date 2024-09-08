@@ -7,8 +7,11 @@ import { useSelector } from "react-redux";
 import { booksSelectors } from "../../store/books/books.selector";
 import { useAppDispatch } from "../../store/store";
 import { addBook } from "../../store/books/books.thunk";
+import { authorsSelectors } from "../../store/author/author.selector";
+import classes from "./CreateBook.module.scss";
 
 export default function CreateBook() {
+  const authors=useSelector(authorsSelectors.authors);
   const books=useSelector(booksSelectors.books)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
@@ -35,7 +38,7 @@ export default function CreateBook() {
           ).then((url) => {
             dispatch(addBook({ ...formik.values, imageUrl: url }));
           });
-          clearForm(resetForm);
+          clearForm(resetForm as (nextValues?: Partial<Book>) => void);
         } catch (error) {
           console.error("Error uploading file:", error);
         }
@@ -51,12 +54,6 @@ export default function CreateBook() {
     imageFile,
     formSubmitted,
   } = useUploadImageFile(formik, fileInputRef);
-
-  const authors = [
-    { id: "1", name: "Author 1" },
-    { id: "2", name: "Author 2" },
-    { id: "3", name: "Author 3" },
-  ];
 
   const checkDuplicateTitleForAuthor = (): boolean => {
     const filteredBooks = books.filter(
@@ -78,8 +75,8 @@ export default function CreateBook() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     //to avoid clear form on submit then errors
-    event.preventDefault();
     setFormSubmitted(true);
+    event.preventDefault();
     if (await checkDuplicateTitleForAuthor()) return;
     formik.handleSubmit();
   };
@@ -93,9 +90,9 @@ export default function CreateBook() {
 
   return (
     <div>
-      <h1>Add Book</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <h1 className='title'>Add Book</h1>
+      <form className='form' onSubmit={handleSubmit}>
+        <div className='input_container'>
           <label htmlFor="title">Title</label>
           <input
             id="title"
@@ -105,10 +102,10 @@ export default function CreateBook() {
             value={formik.values.title}
           />
           {formSubmitted && formik.errors.title && (
-            <div>{formik.errors.title}</div>
+            <div className="error_text">{formik.errors.title}</div>
           )}
         </div>
-        <div>
+        <div className='input_container'>
           <label htmlFor="price">Price</label>
           <input
             id="price"
@@ -121,10 +118,10 @@ export default function CreateBook() {
             max="100"
           />
           {formSubmitted && formik.errors.price && (
-            <div>{formik.errors.price}</div>
+            <div className="error_text">{formik.errors.price}</div>
           )}
         </div>
-        <div>
+        <div className='input_container'>
           <label htmlFor="description">Description</label>
           <input
             id="description"
@@ -134,10 +131,10 @@ export default function CreateBook() {
             value={formik.values.description}
           />
           {formSubmitted && formik.errors.description && (
-            <div>{formik.errors.description}</div>
+            <div className="error_text">{formik.errors.description}</div>
           )}
         </div>
-        <div>
+        <div className='input_container'>
           <label htmlFor="category">Category</label>
           <input
             id="category"
@@ -147,7 +144,7 @@ export default function CreateBook() {
             value={formik.values.category}
           />
           {formSubmitted && formik.errors.category && (
-            <div>{formik.errors.category}</div>
+            <div className="error_text">{formik.errors.category}</div>
           )}
         </div>
         <div>
@@ -161,7 +158,7 @@ export default function CreateBook() {
             onChange={(e) => handleFileInputChange(e, "imageUrl")}
           />
           {formSubmitted && formik.errors.imageUrl && (
-            <div>{formik.errors.imageUrl}</div>
+            <div className="error_text">{formik.errors.imageUrl}</div>
           )}
         </div>
         <div>
@@ -175,14 +172,16 @@ export default function CreateBook() {
           >
             <option value="" label="Select an author" />
             {authors.map((author) => (
-              <option key={author.id} value={author.id} label={author.name} />
+              <option key={author.name} value={author.name} label={author.name} />
             ))}
           </select>
           {formSubmitted && formik.errors.author && (
-            <div>{formik.errors.author}</div>
+            <div className="error_text">{formik.errors.author}</div>
           )}
         </div>
-        <button type="submit">Add Book</button>
+        <div className='button_container'>
+        <button className='submit_button' type="submit">Add Book</button>
+        </div>
       </form>
     </div>
   );

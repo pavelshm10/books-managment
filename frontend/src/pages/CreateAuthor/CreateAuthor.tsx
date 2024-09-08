@@ -7,11 +7,11 @@ import { addAuthor } from "../../store/author/author.thunk";
 import { authorsSelectors } from "../../store/author/author.selector";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
+import classes from "./CreateAuthor.module.scss";
 
 export default function CreateAuthor() {
-  const authors=useSelector(authorsSelectors.authors);
+  const authors = useSelector(authorsSelectors.authors);
   const dispatch = useAppDispatch();
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formik = useFormik<Author>({
     initialValues: {
@@ -32,9 +32,8 @@ export default function CreateAuthor() {
             `images/authors/${formik.values.name}}`
           ).then((url) => {
             dispatch(addAuthor({ ...formik.values, pictureUrl: url }));
-            // addDocument('authors',{ ...formik.values, pictureUrl: url });
           });
-          clearForm(resetForm);
+          clearForm(resetForm as (nextValues?: Partial<Author>) => void);
         } catch (error) {
           console.error("Error uploading file:", error);
         }
@@ -51,24 +50,38 @@ export default function CreateAuthor() {
     formSubmitted,
   } = useUploadImageFile(formik, fileInputRef);
 
+  const checkIfAuthorNameExists = () => {
+    if (
+      authors.some(
+        (author) =>
+          author.name.toLocaleLowerCase() ===
+          formik.values.name.toLocaleLowerCase()
+      )
+    ) {
+      formik.setFieldError("name", "An author with this name already exits");
+      return true;
+    }
+    return false;
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     //to avoid clear form on submit then errors
-    event.preventDefault();
     setFormSubmitted(true);
+    event.preventDefault();
+    if (await checkIfAuthorNameExists()) return;
     formik.handleSubmit();
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    //TODO:check name exits in authors
     formik.setFieldValue("name", value);
   };
 
   return (
     <div>
-      <h1>Add Author</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <h1 className="title">Add Author</h1>
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="input_container">
           <label htmlFor="name">Name</label>
           <input
             id="name"
@@ -78,10 +91,10 @@ export default function CreateAuthor() {
             value={formik.values.name}
           />
           {formSubmitted && formik.errors.name && (
-            <div>{formik.errors.name}</div>
+            <div className="error_text">{formik.errors.name}</div>
           )}
         </div>
-        <div>
+        <div className="input_container">
           <label htmlFor="price">Age</label>
           <input
             id="age"
@@ -93,9 +106,9 @@ export default function CreateAuthor() {
             min="20"
             max="120"
           />
-          {formSubmitted && formik.errors.age && <div>{formik.errors.age}</div>}
+          {formSubmitted && formik.errors.age && <div className="error_text">{formik.errors.age}</div>}
         </div>
-        <div>
+        <div className="input_container">
           <label htmlFor="country">Country</label>
           <input
             id="country"
@@ -105,10 +118,10 @@ export default function CreateAuthor() {
             value={formik.values.country}
           />
           {formSubmitted && formik.errors.country && (
-            <div>{formik.errors.country}</div>
+            <div className="error_text">{formik.errors.country}</div>
           )}
         </div>
-        <div>
+        <div className="input_container">
           <label htmlFor="pictureUrl">Upload Picture</label>
           <input
             id="pictureUrl"
@@ -116,13 +129,17 @@ export default function CreateAuthor() {
             name="pictureUrl"
             type="file"
             accept="image/*"
-            onChange={(e)=>handleFileInputChange(e,'pictureUrl')}
+            onChange={(e) => handleFileInputChange(e, "pictureUrl")}
           />
           {formSubmitted && formik.errors.pictureUrl && (
-            <div>{formik.errors.pictureUrl}</div>
+            <div className="error_text">{formik.errors.pictureUrl}</div>
           )}
         </div>
-        <button type="submit">Add Author</button>
+        <div className="button_container">
+          <button className="submit_button" type="submit">
+            Add Author
+          </button>
+        </div>
       </form>
     </div>
   );

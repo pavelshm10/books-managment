@@ -5,18 +5,10 @@ import classes from './Navbar.module.scss';
 export const Navbar = () => {
   return (
     <nav className={classes.navbar}>
-      <li>
-        <Link to="/books-list">Books List</Link>
-      </li>
-      <li>
-        <Link to="/authors-list">Authors List</Link>
-      </li>
-      <li>
-        <Link to="/create-book">Create Book</Link>
-      </li>
-      <li>
-        <Link to="/create-author">Create Author</Link>
-      </li>
+        <Link className={classes.link} to="/books-list">Books List</Link>
+        <Link className={classes.link} to="/authors-list">Authors List</Link>
+        <Link className={classes.link} to="/create-book">Create Book</Link>
+        <Link className={classes.link} to="/create-author">Create Author</Link>
     </nav>
   );
 };

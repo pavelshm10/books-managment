@@ -1,0 +1,36 @@
+.card_container {
+  height: 350px;
+  border: 2px solid #1976d2;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  margin: 5px;
+}
+
+.card_body {
+  padding: 10px;
+  overflow-y: 250px;
+}
+
+p {
+  margin: 3px;
+}
+
+.book_title {
+  text-align: center;
+  background-color: #1976d2;
+  color: white;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.book_img {
+  width: 150px;
+  margin: 5px auto;
+  height: 100px;
+}
+
+.book_description {
+  overflow-y: 100px;
+}

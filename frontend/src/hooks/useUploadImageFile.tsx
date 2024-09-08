@@ -33,9 +33,9 @@ export const useUploadImageFile = <T extends object>(
     }
   };
 
-  const clearForm = (resetForm: any) => {
+  const clearForm = (resetForm: (nextValues?: Partial<T>) => void) => {
     setFormSubmitted(false);
-    resetForm(resetForm);
+    resetForm();
     if (!fileInputRef.current) return;
     fileInputRef.current.value = "";
   };
