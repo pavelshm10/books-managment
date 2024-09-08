@@ -14,8 +14,6 @@ import CreateBook from "./pages/CreateBook/CreateBook";
 import { fetchBooks } from "./store/books/books.thunk";
 import { useAppDispatch } from "./store/store";
 import { fetchAuthors } from "./store/author/author.thunk";
-import { booksSelectors } from "./store/books/books.selector";
-import { useSelector } from "react-redux";
 import './styles/index';
 import Loader from "./components/Loader/Loader";
 
@@ -37,6 +35,7 @@ function App() {
           <Route path="/authors-list" element={<AuthorsList />} />
           <Route path="/create-author" element={<CreateAuthor />} />
           <Route path="/create-book" element={<CreateBook />} />
+          <Route path="*" element={<Navigate to="/book-list" />} />
         </Routes>
       </Router>
       <Loader/>
