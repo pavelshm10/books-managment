@@ -30,7 +30,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Navigate to="/books-list" />} />
+          <Route path="/" element={<BooksList />} />
           <Route path="/books-list" element={<BooksList />} />
           <Route path="/authors-list" element={<AuthorsList />} />
           <Route path="/create-author" element={<CreateAuthor />} />
