@@ -11,8 +11,8 @@ import { authorsSelectors } from "../../store/author/author.selector";
 import classes from "./CreateBook.module.scss";
 
 export default function CreateBook() {
-  const authors=useSelector(authorsSelectors.authors);
-  const books=useSelector(booksSelectors.books)
+  const authors = useSelector(authorsSelectors.authors);
+  const books = useSelector(booksSelectors.books);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 
@@ -90,9 +90,9 @@ export default function CreateBook() {
 
   return (
     <div>
-      <h1 className='title'>Add Book</h1>
-      <form className='form' onSubmit={handleSubmit}>
-        <div className='input_container'>
+      <h1 className="title">Add Book</h1>
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="input_container">
           <label htmlFor="title">Title</label>
           <input
             id="title"
@@ -105,7 +105,7 @@ export default function CreateBook() {
             <div className="error_text">{formik.errors.title}</div>
           )}
         </div>
-        <div className='input_container'>
+        <div className="input_container">
           <label htmlFor="price">Price</label>
           <input
             id="price"
@@ -121,7 +121,7 @@ export default function CreateBook() {
             <div className="error_text">{formik.errors.price}</div>
           )}
         </div>
-        <div className='input_container'>
+        <div className="input_container">
           <label htmlFor="description">Description</label>
           <input
             id="description"
@@ -134,7 +134,7 @@ export default function CreateBook() {
             <div className="error_text">{formik.errors.description}</div>
           )}
         </div>
-        <div className='input_container'>
+        <div className="input_container">
           <label htmlFor="category">Category</label>
           <input
             id="category"
@@ -172,15 +172,21 @@ export default function CreateBook() {
           >
             <option value="" label="Select an author" />
             {authors.map((author) => (
-              <option key={author.name} value={author.name} label={author.name} />
+              <option
+                key={author.name}
+                value={author.name}
+                label={author.name}
+              />
             ))}
           </select>
           {formSubmitted && formik.errors.author && (
             <div className="error_text">{formik.errors.author}</div>
           )}
         </div>
-        <div className='button_container'>
-        <button className='submit_button' type="submit">Add Book</button>
+        <div className="button_container">
+          <button className="submit_button" type="submit">
+            Add Book
+          </button>
         </div>
       </form>
     </div>

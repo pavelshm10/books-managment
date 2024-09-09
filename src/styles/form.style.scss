@@ -1,62 +1,61 @@
-
-
 .form {
-    width: 25%;
-    border: 2px solid #007bff;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 60vh;
-    border-radius: 5px;
-    padding: 15px;
-  }
-  
-  .button_container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .submit_button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  label {
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  
-  input[type="text"],
-  input[type="number"] {
-    text-align: center;
-    border: none;
-    border-bottom: 1px solid black;
-  }
-  
-  .input_container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .title {
-      background-color: #007bff;
-      color: white;
-      height: 70px;
-      display: flex;
-      justify-content: center; 
-      align-items: center;
-    }
+  width: 25%;
+  min-width: 170px;
+  border: 2px solid #007bff;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 60vh;
+  border-radius: 5px;
+  padding: 15px;
+}
 
-    .error_text{
-      color: red;
-      font-style: italic;
-    }
-  
+.button_container {
+  display: flex;
+  justify-content: center;
+}
+
+.submit_button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+input[type="text"],
+input[type="number"] {
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.input_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  background-color: #007bff;
+  color: white;
+  height: 70px;
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error_text {
+  color: red;
+  font-style: italic;
+}
